@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ollamark</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #0f0f11;
+      --surface: #18181c;
+      --border: #2a2a30;
+      --accent: #7c6af7;
+      --accent-dim: #3d3580;
+      --text: #e8e8f0;
+      --muted: #6b6b80;
+      --success: #4ade80;
+      --error: #f87171;
+      --radius: 10px;
+      --font: 'Segoe UI', system-ui, sans-serif;
+    }
+
+    body {
+      width: 380px;
+      min-height: 200px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 14px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header ── */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-dot {
+      width: 22px;
+      height: 22px;
+      background: var(--accent);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-dot svg {
+      width: 13px;
+      height: 13px;
+      fill: white;
+    }
+
+    .logo-name {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      color: var(--text);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .model-badge {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 3px 8px;
+      max-width: 120px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .icon-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--muted);
+      transition: color 0.15s, border-color 0.15s;
+    }
+
+    .icon-btn:hover {
+      color: var(--text);
+      border-color: var(--accent);
+    }
+
+    .icon-btn svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* ── Body ── */
+    .body {
+      flex: 1;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* ── Summarize button ── */
+    .btn-summarize {
+      width: 100%;
+      padding: 10px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+    }
+
+    .btn-summarize:hover:not(:disabled) {
+      background: #8f7fff;
+    }
+
+    .btn-summarize:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+
+    .btn-summarize:disabled {
+      background: var(--accent-dim);
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    .btn-summarize svg {
+      width: 15px;
+      height: 15px;
+      fill: white;
+    }
+
+    /* ── Output ── */
+    .output-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      min-height: 80px;
+      max-height: 300px;
+      overflow-y: auto;
+      line-height: 1.6;
+      color: var(--text);
+      font-size: 13.5px;
+      display: none;
+      word-break: break-word;
+    }
+
+    .output-box.visible {
+      display: block;
+    }
+
+    .output-box::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .output-box::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .output-box::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    .output-box ul {
+      padding-left: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .output-box li {
+      line-height: 1.55;
+    }
+
+    .output-box h1, .output-box h2, .output-box h3 {
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--text);
+    }
+
+    .output-box h1 { font-size: 15px; }
+    .output-box h2 { font-size: 14px; }
+    .output-box h3 { font-size: 13.5px; color: var(--muted); }
+
+    .output-box strong { color: var(--text); font-weight: 600; }
+    .output-box em { color: var(--muted); }
+
+    .output-box code {
+      background: var(--border);
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-size: 12px;
+      font-family: 'Consolas', monospace;
+    }
+
+    .output-box p { margin-bottom: 6px; }
+    .output-box p:last-child { margin-bottom: 0; }
+
+    .output-box hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 8px 0;
+    }
+
+    /* ── Status / Error ── */
+    .status {
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      display: none;
+    }
+
+    .status.visible {
+      display: flex;
+    }
+
+    .status.error {
+      color: var(--error);
+    }
+
+    .spinner {
+      width: 12px;
+      height: 12px;
+      border: 2px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ── Copy button ── */
+    .btn-copy {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 5px 10px;
+      font-size: 12px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
+      align-self: flex-end;
+      display: none;
+    }
+
+    .btn-copy.visible {
+      display: block;
+    }
+
+    .btn-copy:hover {
+      color: var(--text);
+      border-color: var(--accent);
+    }
+
+    /* ── Footer ── */
+    .footer {
+      padding: 8px 16px 12px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    /* ── Empty state ── */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 20px 0 8px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .empty-state svg {
+      width: 28px;
+      height: 28px;
+      opacity: 0.3;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="logo">
+      <div class="logo-dot">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 6h16M4 12h10M4 18h13"/>
+        </svg>
+      </div>
+      <span class="logo-name">Ollamark</span>
+    </div>
+    <div class="header-actions">
+      <span class="model-badge" id="modelBadge">Loading…</span>
+      <button class="icon-btn" id="settingsBtn" title="Settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="body">
+
+    <button class="btn-summarize" id="summarizeBtn">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 6h16M4 10h12M4 14h8M4 18h10"/>
+      </svg>
+      Summarize this page
+    </button>
+
+    <!-- Loading / Error status -->
+    <div class="status" id="status">
+      <div class="spinner" id="spinner"></div>
+      <span id="statusText">Extracting page content…</span>
+    </div>
+
+    <!-- Output -->
+    <div class="output-box" id="outputBox"></div>
+
+    <!-- Copy -->
+    <button class="btn-copy" id="copyBtn">Copy</button>
+
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

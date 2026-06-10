@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ollamark – Settings</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f0f11;
+      --surface: #18181c;
+      --surface2: #202026;
+      --border: #2a2a30;
+      --accent: #7c6af7;
+      --accent-dim: rgba(124,106,247,0.15);
+      --text: #e8e8f0;
+      --muted: #6b6b80;
+      --success: #4ade80;
+      --error: #f87171;
+      --radius: 10px;
+      --font: 'Segoe UI', system-ui, sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 14px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 48px 16px;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 560px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* ── Header ── */
+    .page-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-dot {
+      width: 34px;
+      height: 34px;
+      background: var(--accent);
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .logo-dot svg {
+      width: 18px;
+      height: 18px;
+      stroke: white;
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+    }
+
+    .page-title h1 {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.4px;
+    }
+
+    .page-title p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 16px 20px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-header-icon {
+      width: 20px;
+      height: 20px;
+      color: var(--accent);
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .card-body {
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    /* ── Form fields ── */
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    input, select, textarea {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 14px;
+      padding: 9px 12px;
+      outline: none;
+      transition: border-color 0.15s;
+      width: 100%;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--accent);
+    }
+
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b6b80' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 32px;
+      cursor: pointer;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 90px;
+      line-height: 1.5;
+    }
+
+    .field-hint {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ── Model row ── */
+    .model-row {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .model-row select {
+      flex: 1;
+    }
+
+    .btn-refresh {
+      height: 38px;
+      width: 38px;
+      flex-shrink: 0;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.15s, border-color 0.15s;
+    }
+
+    .btn-refresh:hover {
+      color: var(--text);
+      border-color: var(--accent);
+    }
+
+    .btn-refresh svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    .btn-refresh.spinning svg {
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Save button ── */
+    .btn-save {
+      width: 100%;
+      padding: 11px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    .btn-save:hover {
+      background: #8f7fff;
+    }
+
+    .btn-save:active {
+      transform: scale(0.98);
+    }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      padding: 9px 18px;
+      font-size: 13px;
+      color: var(--success);
+      opacity: 0;
+      transition: opacity 0.2s, transform 0.2s;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ── Status chip ── */
+    .status-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      padding: 3px 9px;
+      border-radius: 20px;
+      background: var(--accent-dim);
+      color: var(--accent);
+      border: 1px solid rgba(124,106,247,0.3);
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .status-chip.error {
+      background: rgba(248,113,113,0.1);
+      color: var(--error);
+      border-color: rgba(248,113,113,0.3);
+    }
+
+    .status-chip.error .status-dot {
+      background: var(--error);
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <!-- Page header -->
+    <div class="page-header">
+      <div class="logo-dot">
+        <svg viewBox="0 0 24 24">
+          <path d="M4 6h16M4 12h10M4 18h13"/>
+        </svg>
+      </div>
+      <div class="page-title">
+        <h1>Ollamark Settings</h1>
+        <p>Configure your local Ollama connection and summarization preferences.</p>
+      </div>
+    </div>
+
+    <!-- Connection card -->
+    <div class="card">
+      <div class="card-header">
+        <svg class="card-header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/>
+        </svg>
+        <span class="card-title">Ollama Connection</span>
+      </div>
+      <div class="card-body">
+        <div class="field">
+          <label>Base URL</label>
+          <input type="text" id="ollamaUrl" placeholder="http://localhost:11434" />
+          <span class="field-hint">Default: http://localhost:11434</span>
+        </div>
+        <div class="field">
+          <label>Connection status</label>
+          <div id="connectionStatus" class="status-chip error">
+            <div class="status-dot"></div>
+            Not checked
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Model card -->
+    <div class="card">
+      <div class="card-header">
+        <svg class="card-header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <ellipse cx="12" cy="5" rx="9" ry="3"/>
+          <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+          <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+        </svg>
+        <span class="card-title">Model</span>
+      </div>
+      <div class="card-body">
+        <div class="field">
+          <label>Active model</label>
+          <div class="model-row">
+            <select id="modelSelect">
+              <option value="">— click refresh to load models —</option>
+            </select>
+            <button class="btn-refresh" id="refreshBtn" title="Fetch models from Ollama">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="23 4 23 10 17 10"/>
+                <polyline points="1 20 1 14 7 14"/>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+              </svg>
+            </button>
+          </div>
+          <span class="field-hint">Click refresh to fetch installed models from Ollama.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Prompt card -->
+    <div class="card">
+      <div class="card-header">
+        <svg class="card-header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+        <span class="card-title">System Prompt</span>
+      </div>
+      <div class="card-body">
+        <div class="field">
+          <label>Instructions for the model</label>
+          <textarea id="systemPrompt" placeholder="You are a concise summarizer…"></textarea>
+          <span class="field-hint">This is sent before the page content on every summarization request.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Save -->
+    <button class="btn-save" id="saveBtn">Save settings</button>
+
+  </div>
+
+  <div class="toast" id="toast">✓ Settings saved</div>
+
+  <script src="options.js"></script>
+</body>
+</html>
